@@ -10,8 +10,10 @@ jobs:
       uses: actions/checkout@v2
     - name: Makepkg Build and Check
       id: makepkg
+      with:
+         makepkgArgs: "-s  --skippgpcheck -f"
       uses: edlanglois/pkgbuild-action@v1
-    - name: Print Package Files
+    - name: Print Package Filesz
       run: |
         echo "Successfully created the following package archive"
         echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
@@ -20,12 +22,4 @@ jobs:
     #   uses: actions/upload-artifact@v2
     #   with:
     #     path: ${{ steps.makepkg.outputs.pkgfile0 }}
-inputs:
-  pkgdir:
-    description: "Relative path to directory containing the PKGBUILD file."
-    required: false
-    default: "."
-  makepkgArgs:
-    description: "Additional arguments to pass to makepkg."
-    required: true
-    default: "-s  --skippgpcheck -f"
+      

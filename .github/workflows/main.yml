@@ -1,28 +1,31 @@
-# This is a basic workflow to help you get started with Actions
+name: PKGBUILD CI
 
-name: CI
+on: [push, pull_request]
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  pkgbuild:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Build archlinux package
-        uses: ktcar214/arch-makepkg-action@master
-        with:
-          pkgname: linux-tikogasa
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Makepkg Build and Check
+      id: makepkg
+      uses: edlanglois/pkgbuild-action@v1
+    - name: Print Package Files
+      run: |
+        echo "Successfully created the following package archive"
+        echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
+    # Uncomment to upload the package as an artifact
+    # - name: Upload Package Archive
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     path: ${{ steps.makepkg.outputs.pkgfile0 }}
+inputs:
+  pkgdir:
+    description: "Relative path to directory containing the PKGBUILD file."
+    required: false
+    default: "."
+  makepkgArgs:
+    description: "Additional arguments to pass to makepkg."
+    required: true
+    default: "-s  --skippgpcheck -f"

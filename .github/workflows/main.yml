@@ -24,3 +24,5 @@ jobs:
     steps:
       - name: Build archlinux package
         uses: ktcar214/arch-makepkg-action@master
+        with:
+          pkgname: linux-tikogasa

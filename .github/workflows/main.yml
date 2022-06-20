@@ -22,17 +22,5 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: Arch Linux PKGBUILD builder action
-      # You may pin to the exact commit or the version.
-      # uses: 2m/arch-pkgbuild-builder@153f46bb4c3aea1d723a3f2651c867de46658181
-      uses: 2m/arch-pkgbuild-builder@v1.18
-      with:
-        # Path to DIRECTORY where the PKGBUILD file is. Assumes the directory is the name of package, ie /path/to/pkgname/
-        pkgname: pkgbuild
-        # Validation target. Can be one of: "pkgbuild", "srcinfo", "run"
-        target: pkgbuild
-        # Command to run after package installation. Used when target=run
-        command: # optional
-        # Turns debugging on
-        debug: # optional
+      - name: Build archlinux package
+        uses: ktcar214/arch-makepkg-action@master

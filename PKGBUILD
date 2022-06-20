@@ -12,7 +12,7 @@ url="https://github.com/torvalds/linux"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
-  bc libelf pahole cpio perl tar xz
+  bc libelf pahole cpio perl tar xz clang
   xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
 )
 options=('!strip')

@@ -1,0 +1,5 @@
+steps:
+- name: Build archlinux package
+  uses: ktcar214/arch-makepkg-action@master
+name: Linux-tikogasa
+on: push

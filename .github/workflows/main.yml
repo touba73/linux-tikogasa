@@ -22,4 +22,23 @@ jobs:
     #   uses: actions/upload-artifact@v2
     #   with:
     #     path: ${{ steps.makepkg.outputs.pkgfile0 }}
+    - name: Move Packages
+      run: |
+        mkdir packages
+        mv *.zst packages
+    - name: Zip the Build
+      run: zip -r ${{ secrets.ReleaseZipName }} ./packages
+      
+    - name: Create Release and Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        tag_name: ${{ github.ref }}
+        name: Release ${{ github.ref }}
+        body: TODO New Release.
+        draft: false
+        prerelease: false
+        files: |
+          ${{ secrets.ReleaseZipName }}.zip
+          LICENSE 
       

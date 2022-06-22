@@ -41,6 +41,6 @@ jobs:
         draft: false
         prerelease: false
         files:
-          ${{ secrets.ReleaseZipName }}.zip
+          5.18.5.zip
           LICENSE 
       

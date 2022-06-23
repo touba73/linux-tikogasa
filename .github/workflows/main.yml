@@ -10,8 +10,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Makepkg Build and Check
       id: makepkg
-      with:
-         makepkgArgs: "-s  --skippgpcheck -f"
       run: ./mkpkg.sh
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest

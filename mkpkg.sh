@@ -3,12 +3,13 @@
 set -euo pipefail
 
 FILE="$(basename "$0")"
-sudo echo -e '\n[archlinuxcn]\nServer = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
-sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring  --noconfirm
+
 # Enable the multilib repository
 cat << EOM >> /etc/pacman.conf
 [multilib]
 Include = /etc/pacman.d/mirrorlist
+[archlinuxcn]
+Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 EOM
 
 pacman -Syu --noconfirm --needed base-devel
@@ -50,7 +51,15 @@ if [ -n "${INPUT_AURDEPS:-}" ]; then
 		<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
 	sudo -H -u builder yay --sync --noconfirm "${PKGDEPS[@]}"
 fi
-
+sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring  --noconfirm
+sudo pacman -Syu haveged
+sudo systemctl start haveged
+sudo systemctl enable haveged
+sudo rm -fr /etc/pacman.d/gnupg
+sudo pacman-key --init
+sudo pacman-key --populate archlinux
+sudo pacman-key --populate archlinuxcn
+sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring  --noconfirm
 # Build packages
 # INPUT_MAKEPKGARGS is intentionally unquoted to allow arg splitting
 # shellcheck disable=SC2086

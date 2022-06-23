@@ -15,7 +15,7 @@ makedepends=(
   xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
 )
 options=('!strip')
-_srcname=linux-5.18
+_srcname="linux-${gitver}"
 source=(
   "https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${gitver}.tar."{xz,sign}
   "clearlinux-linux::git+https://github.com/clearlinux-pkgs/linux"

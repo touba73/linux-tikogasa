@@ -4,21 +4,20 @@ pkgbase=linux-tikogasa
 pkgver=v5.18.5
 pkgrel=1
 pkgdesc='Linux'
-gitver=5.18.5
-_major=5.18.5
+gitver=5.18.6
 _srctag=v${pkgver%.*}-${pkgver##*.}
 _branch=5.x
 url="https://github.com/torvalds/linux"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
-  bc libelf pahole cpio perl tar xz clang lld
+  bc libelf pahole cpio perl tar xz clang lld initramfs kmod
   xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
 )
 options=('!strip')
 _srcname=linux-5.18
 source=(
-  "https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
+  "https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${gitver}.tar."{xz,sign}
   "clearlinux-linux::git+https://github.com/clearlinux-pkgs/linux"
   config         # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
@@ -30,7 +29,7 @@ validpgpkeys=(
   'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
   'C7E7849466FE2358343588377258734B41C31549'  # David Runge <dvzrv@archlinux.org>
 )
-sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
+sha256sums=('4e1c2a9e79847850029571a1dd04761e5f657b52c558070a085365641f133478'
             'SKIP'
             'SKIP'
             'bbe402bca5010646d5e243e76971ca19eda924fcba95e34787d0de3158797dcd'
@@ -52,7 +51,6 @@ prepare() {
   echo "Setting version..."
   scripts/setlocalversion --save-scmversion
   scripts/config --enable LTO_CLANG_THIN
-  echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux}" > localversion.20-pkgname
 
   local src
@@ -82,7 +80,7 @@ build() {
 
 _package() {
   pkgdesc="The $pkgdesc kernel and modules"
-  depends=(coreutils kmod initramfs)
+  depends=()
   optdepends=('wireless-regdb: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
   provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE)

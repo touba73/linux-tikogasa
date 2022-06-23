@@ -4,7 +4,7 @@ set -euo pipefail
 
 FILE="$(basename "$0")"
 sudo echo -e '\n[archlinuxcn]\nServer = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch' | sudo tee -a /etc/pacman.conf
-sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring
+sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring  --noconfirm
 # Enable the multilib repository
 cat << EOM >> /etc/pacman.conf
 [multilib]

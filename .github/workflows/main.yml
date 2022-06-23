@@ -8,6 +8,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: archlinux
+      run: |
+        sudo echo -e '\n[archlinuxcn]\nServer = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch' >> /etc/pacman.conf
+        sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring
     - name: Makepkg Build and Check
       id: makepkg
       with:

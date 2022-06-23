@@ -17,30 +17,18 @@ jobs:
       run: |
         echo "Successfully created the following package archive"
         echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
-    # Uncomment to upload the package as an artifact
-    # - name: Upload Package Archive
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     path: ${{ steps.makepkg.outputs.pkgfile0 }}
-    - name: Move Packages
-      run: |
-        mkdir packages
-        cp ./*.zst ./packages
-    - name: Zip the Build
-      run:  | 
-        sleep 30s
-        zip -r ./5.18.5.zip ./packages
-      
-    - name: Create Release and Upload Release Asset
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+    Uncomment to upload the package as an artifact
+    - name: Upload Package Archive
+      uses: actions/upload-artifact@v2
       with:
-        tag_name: ${{ github.ref }}
-        name: Release ${{ github.ref }}
-        body: TODO New Release.
-        draft: false
+        path: ${{ steps.makepkg.outputs.pkgfile0 }}
+    - name: Create GitHub release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: v5.18.5
+        title: v5.18.5
         prerelease: false
-        files:
-          5.18.5.zip
-          LICENSE 
+        files: |
+          ${{ steps.makepkg.outputs.pkgfile0 }}
       

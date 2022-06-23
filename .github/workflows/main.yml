@@ -20,7 +20,7 @@ jobs:
     - name: Upload Package Archive
       uses: actions/upload-artifact@v2
       with:
-        path: ${{ steps.makepkg.outputs.pkgfile0 }}
+        path: ./*.zst
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest
       with:
@@ -29,5 +29,5 @@ jobs:
         title: v5.18.5
         prerelease: false
         files: |
-          ${{ steps.makepkg.outputs.pkgfile0 }}
+          ./*.zst
       

@@ -9,7 +9,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install Archlinux
-      uses: ./action.yaml
+      uses: ./action.yml
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest
       with:

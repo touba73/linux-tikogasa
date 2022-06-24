@@ -9,12 +9,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install Archlinux
-      runs:
-        using: 'docker'
-        image: 'Dockerfile'
-    - name: Makepkg Build and Check
-      id: makepkg
-      run: bash mkpkg.sh
+      uses: Pinghigh/actions_archlinuxcn@v1
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest
       with:

@@ -9,7 +9,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install Archlinux
-      uses: Pinghigh/actions_archlinuxcn@v1
+      uses: Pinghigh/actions_archlinuxcn
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest
       with:

@@ -5,7 +5,7 @@ set -euo pipefail
 FILE="$(basename "$0")"
 
 # Enable the multilib repository
-cat ./source.conf | tee -a /etc/pacman.conf
+cat ./source.conf | sudo tee -a /etc/pacman.conf
 
 pacman -Syu --noconfirm --needed base-devel
 

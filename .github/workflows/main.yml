@@ -9,7 +9,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install Archlinux
-      run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
+      runs:
+        using: 'docker'
+        image: 'Dockerfile'
     - name: Makepkg Build and Check
       id: makepkg
       run: bash mkpkg.sh

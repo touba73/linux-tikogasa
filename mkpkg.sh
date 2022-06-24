@@ -5,12 +5,7 @@ set -euo pipefail
 FILE="$(basename "$0")"
 
 # Enable the multilib repository
-cat << EOM >> /etc/pacman.conf
-[multilib]
-Include = /etc/pacman.d/mirrorlist
-[archlinuxcn]
-Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
-EOM
+cat ./source.conf >> /etc/pacman.conf
 
 pacman -Syu --noconfirm --needed base-devel
 

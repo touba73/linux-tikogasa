@@ -1,0 +1,7 @@
+# action.yml
+name: 'actions_archlinuxcn'
+description: 'haha'
+author: Pinghigh
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

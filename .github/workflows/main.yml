@@ -12,7 +12,7 @@ jobs:
       id: makepkg
       with: 
         makepkgArgs: -s --skippgpcheck -f
-      uses: Pinghigh/pkgbuild-action@v3.2
+      uses: Pinghigh/pkgbuild-action@v3.3
     - name: Print Package Files
       run: |
         echo "Successfully created the following package archive"

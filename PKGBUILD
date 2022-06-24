@@ -2,7 +2,7 @@
 
 pkgbase=linux-tikogasa
 pkgver=v5.18.6
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux'
 gitver=5.18.6
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -22,6 +22,7 @@ source=(
   config         # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
+  "https://raw.githubusercontent.com/damentz/liquorix-package/5.18/master/linux-liquorix/debian/patches/zen/v5.18.6-lqx1.patch"
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
@@ -34,13 +35,20 @@ sha256sums=('4e1c2a9e79847850029571a1dd04761e5f657b52c558070a085365641f133478'
             'SKIP'
             '2b065359cc786132337ff1dd205dda21222ca31141b4f891fe150adda160ea91'
             'SKIP'
-            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d')
+            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d'
+            '38423995b3bf0fae08adf88c7ac3814d61c4223f9a22119306710b836ac5efc8')
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
-prepare() {
+prepare() { 
+  sed -i '/-SUBLEVEL = 0/d' v5.18.6-lqx1.patch
+  sed -i '/-EXTRAVERSION =/d' v5.18.6-lqx1.patch
+  sed -i '/-NAME = Superb Owl/d' v5.18.6-lqx1.patch
+  sed -i '/+SUBLEVEL = 6/d' v5.18.6-lqx1.patch
+  sed -i '/+EXTRAVERSION = -lqx1/d' v5.18.6-lqx1.patch
+  sed -i '/+NAME = Eternal Return/d' v5.18.6-lqx1.patch
   cp clearlinux-linux/*.patch ./
   cp linux-patches/linux-5.18.y-xanmod/wine/* ./
   cp linux-patches/linux-5.18.y-xanmod/graysky/* ./

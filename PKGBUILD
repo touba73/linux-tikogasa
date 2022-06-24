@@ -1,7 +1,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 pkgbase=linux-tikogasa
-pkgver=v5.18.5
+pkgver=v5.18.6
 pkgrel=1
 pkgdesc='Linux'
 gitver=5.18.6
@@ -11,8 +11,8 @@ url="https://github.com/torvalds/linux"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
-  bc libelf pahole cpio perl tar xz clang lld initramfs kmod
-  xmlto llvm-libs python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
+  bc libelf pahole cpio perl tar xz clang-git lld-git initramfs kmod
+  xmlto llvm-libs-git python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm-git git
 )
 options=('!strip')
 _srcname="linux-${gitver}"

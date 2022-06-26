@@ -1,0 +1,10 @@
+@@ -1,9 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ VERSION = 5
+ PATCHLEVEL = 18
+-SUBLEVEL = 0
+-EXTRAVERSION =
+-NAME = Superb Owl
++SUBLEVEL = 7
++EXTRAVERSION = -kgs1
++NAME = Eternal Return

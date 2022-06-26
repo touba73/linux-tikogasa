@@ -1,98 +1,256 @@
-# Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+# Maintainer: Piotr Gorski <lucjan.lucjanov@gmail.com> PGP-Key: BDB26C5A
+# Contributor: shivik <> PGP-Key: 761E423C
+# Contributor: Michael Duell <mail@akurei.me> PGP-Key: 6EE23EBE
+# A special thanks to Steven Barrett for very important suggestions
+# Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Thomas Baechler <thomas@archlinux.org>
 
+### BUILD OPTIONS
+# Set these variables to ANYTHING that is not null to enable them
+
+### Tweak kernel options prior to a build via nconfig
+_makenconfig=
+
+### Tweak kernel options prior to a build via menuconfig
+_makemenuconfig=
+
+### Tweak kernel options prior to a build via xconfig
+_makexconfig=
+
+### Tweak kernel options prior to a build via gconfig
+_makegconfig=
+
+# NUMA is optimized for multi-socket motherboards.
+# A single multi-core CPU actually runs slower with NUMA enabled.
+# See, https://bugs.archlinux.org/task/31187
+_NUMAdisable=y
+
+# Compile ONLY used modules to VASTLYreduce the number of modules built
+# and the build time.
+#
+# To keep track of which modules are needed for your specific system/hardware,
+# give module_db script a try: https://aur.archlinux.org/packages/modprobed-db
+# This PKGBUILD read the database kept if it exists
+#
+# More at this wiki page ---> https://wiki.archlinux.org/index.php/Modprobed-db
+_localmodcfg=
+
+# Use the current kernel's .config file
+# Enabling this option will use the .config of the RUNNING kernel rather than
+# the ARCH defaults. Useful when the package gets updated and you already went
+# through the trouble of customizing your config options.  NOT recommended when
+# a new kernel is released, but again, convenient for package bumps.
+_use_current=
+
+### Selecting the CPU scheduler
+# ATTENTION - one of three predefined values should be selected!
+# 'bmq' - select 'BitMap Queue CPU scheduler'
+# 'pds' - select 'Priority and Deadline based Skip list multiple queue CPU scheduler'
+# 'none' - select 'Completely Fair Scheduler'
+_projectc='pds'
+
+### Enable htmldocs (increases compile time)
+_htmldocs_enable=False
+
+### Do not edit below this line unless you know what you're doing
+
+# pkgname=('linux-lqx' 'linux-lqx-headers' 'linux-lqx-docs')
+_major=5.18
+_srcname=linux-${_major}
+_lqxpatchname=liquorix-package
+_lqxpatchrel=3
+_lqxpatchver=${_lqxpatchname}-${_major}-${_lqxpatchrel}
 pkgbase=linux-tikogasa
-pkgver=v5.18.6
-pkgrel=2
-pkgdesc='Linux'
-gitver=5.18.6
-_srctag=v${pkgver%.*}-${pkgver##*.}
-_branch=5.x
-url="https://github.com/torvalds/linux"
+pkgver=5.18.7
+pkgrel=1
+pkgdesc='Linux Liquorix'
+url='https://liquorix.net/'
 arch=(x86_64)
 license=(GPL2)
-makedepends=(
-  bc libelf pahole cpio perl tar xz clang-git lld-git initramfs kmod
-  xmlto llvm-libs-git python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm-git git
-)
+makedepends=(bc libelf cpio python pahole llvm lld clang llvm-libs python)
 options=('!strip')
-_srcname="linux-${gitver}"
-source=(
-  "https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${gitver}.tar."{xz,sign}
-  "clearlinux-linux::git+https://github.com/clearlinux-pkgs/linux"
-  config         # the main kernel config file
-  "linux-patches::git+https://github.com/xanmod/linux-patches"
-  "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
-  "https://raw.githubusercontent.com/damentz/liquorix-package/5.18/master/linux-liquorix/debian/patches/zen/v5.18.6-lqx1.patch"
-)
+#_lucjanpath="https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/${_major}"
+_lucjanpath="https://gitlab.com/sirlucjan/kernel-patches/raw/master/${_major}"
+
+source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
+        "https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.sign"
+        "https://codeload.github.com/damentz/${_lqxpatchname}/tar.gz/refs/tags/${_major}-${_lqxpatchrel}"
+        "linux-patches::git+https://github.com/xanmod/linux-patches"
+        "clearlinux-linux::git+https://github.com/clearlinux-pkgs/linux"
+        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
+        "init.py"
+        "delete.txt"
+        "insert.txt")
 validpgpkeys=(
-  'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
-  '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
-  'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
-  'C7E7849466FE2358343588377258734B41C31549'  # David Runge <dvzrv@archlinux.org>
+    'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
+    '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
 )
-sha256sums=('4e1c2a9e79847850029571a1dd04761e5f657b52c558070a085365641f133478'
+sha512sums=('dbbc9d1395898a498fa4947fceda1781344fa5d360240f753810daa4fa88e519833e2186c4e582a8f1836e6413e9e85f6563c7770523b704e8702d67622f98b5'
+            'SKIP'
+            'aa1b5503c427c09ed94a606d6266579084a113bfd160173550fd4603588d2475e3876cb62a3ac23d5120b5167347a6027f27a9020a87cbba8fd6397b0a2c1afe'
             'SKIP'
             'SKIP'
-            '2b065359cc786132337ff1dd205dda21222ca31141b4f891fe150adda160ea91'
-            'SKIP'
-            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d'
-            '38423995b3bf0fae08adf88c7ac3814d61c4223f9a22119306710b836ac5efc8')
+            'b2a4c73ec0e47bbe7e242a193add0349986d641f46cbd6896983b61263c9ad22b0a32aabfbd3318c5af01cf850329b92e3c597dc8ca44d3591f0fc817ae38900'
+            '8c66a8f786cfc87a5da09978daf6014adbf819183884ea0fd2fc5558095bae11f5e8f9f1dd8974959c59b0b285e2e574fcff910a12fd83142d944d473128e876'
+            '4fd87f0940a93d9e3a006862cd1dfa5ab72c4c4577944b8213ba876a1a6b95003494e9c039a43d8d03684c566cf63b6765eb06e614a5220c59ff535ac11039d7'
+            '014f98ed6402365b68afa673c88c72370946aa6123684869983a323b6af3cf8f2f3fc085f8bf776bbb5a7ab88b20a2a0a8c788f4755f08a0ab96f017f78a1d6d')
+
+
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
-prepare() { 
-  sed -i '/-SUBLEVEL = 0/d' v5.18.6-lqx1.patch
-  sed -i '/-EXTRAVERSION =/d' v5.18.6-lqx1.patch
-  sed -i '/-NAME = Superb Owl/d' v5.18.6-lqx1.patch
-  sed -i '/+SUBLEVEL = 6/d' v5.18.6-lqx1.patch
-  sed -i '/+EXTRAVERSION = -lqx1/d' v5.18.6-lqx1.patch
-  sed -i '/+NAME = Eternal Return/d' v5.18.6-lqx1.patch
-  cp clearlinux-linux/*.patch ./
-  cp linux-patches/linux-5.18.y-xanmod/wine/* ./
-  cp linux-patches/linux-5.18.y-xanmod/graysky/* ./
-  cp linux-patches/linux-5.18.y-xanmod/android_anbox/* ./
-  cp linux-patches/linux-5.18.y-xanmod/xanmod/* ./
-  cd $_srcname
+prepare() {
+    python init.py
+    cp clearlinux-linux/*.patch ./
+    cp linux-patches/linux-5.18.y-xanmod/wine/* ./
+    cp linux-patches/linux-5.18.y-xanmod/graysky/* ./
+    cp linux-patches/linux-5.18.y-xanmod/android_anbox/* ./
+    cp linux-patches/linux-5.18.y-xanmod/xanmod/* ./
+    cd $_srcname
 
-  echo "Setting version..."
-  scripts/setlocalversion --save-scmversion
-  scripts/config --enable LTO_CLANG_THIN
-  echo "${pkgbase#linux}" > localversion.20-pkgname
+    ### Set package version variables
+        _abiname="$(cat ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/defines | grep 'abiname:' | sed -r 's/abiname:\s*//')"
+        _minor="$(echo "$_abiname" | cut -f1 -d .)"
+        _patchrel="$(echo "$_abiname" | cut -f2 -d .)"
 
-  local src
-  for src in "${source[@]}"; do
-    src="${src%%::*}"
-    src="${src##*/}"
-    [[ $src = *.patch ]] || continue
-    echo "Applying patch $src..."
-    patch -Np1 < "../$src"
-  done
+    ### Add Liquorix patches
+        local _patchrx='^zen/v\d+\.\d+\.\d+-lqx\d+.patch$'
+        local _patchfolder="${srcdir}/${_lqxpatchver}/linux-liquorix/debian/patches"
+        local _patchpath="$(grep -P "$_patchrx" "$_patchfolder/series")"
+        echo "Patching sources with ${_patchpath#*/}"
+        patch -Np1 -i "$_patchfolder/$_patchpath"
 
-  echo "Setting config..."
-  cp ../config .config
-  make oldconfig && make prepare
-  diff -u ../config .config || :
+    ### Setting version
+        echo "Setting version..."
+        scripts/setlocalversion --save-scmversion
+        echo "-$pkgrel" > localversion.10-pkgrel
+        echo "${pkgbase#linux}" > localversion.20-pkgname
 
-  make -s kernelrelease > version
-  echo "Prepared $pkgbase version $(<version)"
+    ### Patching sources
+        local src
+        for src in "${source[@]}"; do
+            src="${src%%::*}"
+            src="${src##*/}"
+            [[ $src = *.patch ]] || continue
+        echo "Applying patch $src..."
+        patch -Np1 < "../$src"
+        done
+
+    ### Setting config
+        echo "Setting config..."
+        cat ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/kernelarch-x86/config-arch-64 >./.config
+        make olddefconfig
+        diff -u ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/kernelarch-x86/config-arch-64 .config || :
+        scripts/config --enable CONFIG_LTO
+        scripts/config --enable CONFIG_LTO_CLANG
+        scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG
+        scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN
+        scripts/config --enable CONFIG_HAS_LTO_CLANG
+        scripts/config --enable CONFIG_LTO_CLANG_THIN
+        scripts/config --enable LTO_CLANG_THIN
+    ### Prepared version
+        make -s kernelrelease > version
+        echo "Prepared $pkgbase version $(<version)"
+
+    ### Optionally use running kernel's config
+	# code originally by nous; http://aur.archlinux.org/packages.php?ID=40191
+	if [ -n "$_use_current" ]; then
+		if [[ -s /proc/config.gz ]]; then
+			echo "Extracting config from /proc/config.gz..."
+			# modprobe configs
+			zcat /proc/config.gz > ./.config
+		else
+			warning "Your kernel was not compiled with IKCONFIG_PROC!"
+			warning "You cannot read the current config!"
+			warning "Aborting!"
+			exit
+		fi
+	fi
+
+    ### Selecting the CPU scheduler
+	if [ "$_projectc" = "bmq" ]; then
+		echo "Selecting BMQ CPU scheduler..."
+		scripts/config --enable CONFIG_SCHED_BMQ
+		scripts/config --disable CONFIG_SCHED_PDS
+	elif [ "$_projectc" = "pds" ]; then
+		echo "Selecting PDS CPU scheduler..."
+		scripts/config --disable CONFIG_SCHED_BMQ
+		scripts/config --enable CONFIG_SCHED_PDS
+	elif [ "$_projectc" = "none" ]; then
+		echo "Selecting Completely Fair Scheduler..."
+		scripts/config --disable CONFIG_SCHED_ALT
+	else
+		if [ -n "$_projectc" ]; then
+			error "The value $_projectc is invalid. Choose the correct one again."
+		else
+			error "The value is empty. Choose the correct one again."
+		fi
+		error "Selecting the CPU scheduler failed!"
+		exit
+	fi
+
+    ### Optionally disable NUMA for 64-bit kernels only
+        # (x86 kernels do not support NUMA)
+        if [ -n "$_NUMAdisable" ]; then
+            echo "Disabling NUMA from kernel config..."
+            scripts/config --disable CONFIG_NUMA
+        fi
+
+    ### Optionally load needed modules for the make localmodconfig
+        # See https://aur.archlinux.org/packages/modprobed-db
+        if [ -n "$_localmodcfg" ]; then
+            if [ -f $HOME/.config/modprobed.db ]; then
+            echo "Running Steven Rostedt's make localmodconfig now"
+            make LSMOD=$HOME/.config/modprobed.db localmodconfig
+        else
+            echo "No modprobed.db data found"
+            exit
+            fi
+        fi
+    scripts/config --disable CONFIG_CC_IS_GCC
+    scripts/config --disable CONFIG_AS_IS_GNU
+    ### Running make nconfig
+	[[ -z "$_makenconfig" ]] ||  make nconfig
+
+    ### Running make menuconfig
+	[[ -z "$_makemenuconfig" ]] || make menuconfig
+
+    ### Running make xconfig
+	[[ -z "$_makexconfig" ]] || make xconfig
+
+    ### Running make gconfig
+	[[ -z "$_makegconfig" ]] || make gconfig
+
+    ### Save configuration for later reuse
+	cat .config > "${startdir}/config.last"
+  scripts/config --disable CONFIG_CC_IS_GCC
+  scripts/config --disable CONFIG_AS_IS_GNU
+  scripts/config --undefine CONFIG_AS_VERSION
+  scripts/config --undefine CONFIG_GCC_VERSION
+  scripts/config --undefine CONFIG_CC_VERSION_TEXT
+  scripts/config --undefine CONFIG_CLANG_VERSION
 }
 
 build() {
   cd $_srcname
+
   CFLAGS="-march=znver2 -O3"
   CXXFLAGS="${CFLAGS}"
-  make LLVM=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" LOCALVERSION= bzImage modules -j16
+  make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
 }
 
 _package() {
-  pkgdesc="The $pkgdesc kernel and modules"
-  depends=()
-  optdepends=('wireless-regdb: to set the correct wireless channels of your country'
-              'linux-firmware: firmware images needed for some devices')
-  provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE)
-  replaces=(virtualbox-guest-modules-arch wireguard-arch)
+    pkgdesc="The $pkgdesc kernel and modules"
+    depends=(coreutils kmod initramfs)
+    optdepends=('wireless-regdb: to set the correct wireless channels of your country'
+                'linux-firmware: firmware images needed for some devices'
+                'sof-firmware: firmware images needed for Sound Open Firmware capable devices'
+                'modprobed-db: Keeps track of EVERY kernel module that has ever been probed - useful for those of us who make localmodconfig'
+                'uksmd: Userspace KSM helper daemon')
+    provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE UKSMD-BUILTIN VHBA-MODULE)
 
   cd $_srcname
   local kernver="$(<version)"
@@ -115,8 +273,8 @@ _package() {
 }
 
 _package-headers() {
-  pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
-  depends=(pahole)
+    pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
+    depends=('linux-lqx' 'pahole')
 
   cd $_srcname
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
@@ -128,11 +286,11 @@ _package-headers() {
   install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
   cp -t "$builddir" -a scripts
 
-  # required when STACK_VALIDATION is enabled
+  # add objtool for external module building and enabled VALIDATION_STACK option
   install -Dt "$builddir/tools/objtool" tools/objtool/objtool
 
-  # required when DEBUG_INFO_BTF_MODULES is enabled
-  install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
+  # add xfs and shmem for aufs building
+  mkdir -p "$builddir"/{fs/xfs,mm}
 
   echo "Installing headers..."
   cp -t "$builddir" -a include
@@ -194,6 +352,26 @@ _package-headers() {
   echo "Adding symlink..."
   mkdir -p "$pkgdir/usr/src"
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
+}
+
+_package-docs() {
+    pkgdesc="Documentation for the $pkgdesc kernel"
+    depends=('linux-lqx')
+
+  cd $_srcname
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+
+  echo "Installing documentation..."
+  local src dst
+  while read -rd '' src; do
+    dst="${src#Documentation/}"
+    dst="$builddir/Documentation/${dst#output/}"
+    install -Dm644 "$src" "$dst"
+  done < <(find Documentation -name '.*' -prune -o ! -type d -print0)
+
+  echo "Adding symlink..."
+  mkdir -p "$pkgdir/usr/share/doc"
+  ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
 }
 
 pkgname=("$pkgbase" "$pkgbase-headers")

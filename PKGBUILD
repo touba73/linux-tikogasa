@@ -274,7 +274,7 @@ _package() {
 
 _package-headers() {
     pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
-    depends=('linux-lqx' 'pahole')
+    depends=('linux-tikogasa' 'pahole')
 
   cd $_srcname
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
@@ -356,7 +356,7 @@ _package-headers() {
 
 _package-docs() {
     pkgdesc="Documentation for the $pkgdesc kernel"
-    depends=('linux-lqx')
+    depends=('linux-tikogasa')
 
   cd $_srcname
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"

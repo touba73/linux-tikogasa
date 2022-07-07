@@ -81,7 +81,8 @@ source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.x
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
         "init.py"
         "delete.txt"
-        "insert.txt")
+        "insert.txt"
+        ""git+https://github.com/openzfs/zfs.git#commit=6c3c5fcfbe27d9193cd131753cc7e47ee2784621"")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -94,7 +95,8 @@ sha512sums=('dbbc9d1395898a498fa4947fceda1781344fa5d360240f753810daa4fa88e519833
             'b2a4c73ec0e47bbe7e242a193add0349986d641f46cbd6896983b61263c9ad22b0a32aabfbd3318c5af01cf850329b92e3c597dc8ca44d3591f0fc817ae38900'
             'bc5bbab328be96e1629a8fcc168391bb739730e029573686d18e598d830e0b1e68a73953192468eae03f8ad1ba6068126716f702a71b21a02f7e0f035ba0495f'
             '4fd87f0940a93d9e3a006862cd1dfa5ab72c4c4577944b8213ba876a1a6b95003494e9c039a43d8d03684c566cf63b6765eb06e614a5220c59ff535ac11039d7'
-            '014f98ed6402365b68afa673c88c72370946aa6123684869983a323b6af3cf8f2f3fc085f8bf776bbb5a7ab88b20a2a0a8c788f4755f08a0ab96f017f78a1d6d')
+            '014f98ed6402365b68afa673c88c72370946aa6123684869983a323b6af3cf8f2f3fc085f8bf776bbb5a7ab88b20a2a0a8c788f4755f08a0ab96f017f78a1d6d'
+            'SKIP')
 
 
 
@@ -144,13 +146,117 @@ prepare() {
         cat ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/kernelarch-x86/config-arch-64 >./.config
         make olddefconfig
         diff -u ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/kernelarch-x86/config-arch-64 .config || :
-        scripts/config --enable CONFIG_LTO
-        scripts/config --enable CONFIG_LTO_CLANG
-        scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG
-        scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN
-        scripts/config --enable CONFIG_HAS_LTO_CLANG
-        scripts/config --enable CONFIG_LTO_CLANG_THIN
-        scripts/config --enable LTO_CLANG_THIN
+        echo "Enabling LLVM FULL LTO..."
+        scripts/config \
+            --enable LTO \
+            --enable LTO_CLANG \
+            --enable ARCH_SUPPORTS_LTO_CLANG \
+            --enable ARCH_SUPPORTS_LTO_CLANG_THIN \
+            --disable LTO_NONE \
+            --enable HAS_LTO_CLANG \
+            --enable LTO_CLANG_FULL \
+            --disable LTO_CLANG_THIN \
+            --enable HAVE_GCC_PLUGINS
+        echo "Disabling NUMA from kernel config..."
+        scripts/config --disable NUMA \
+            --disable AMD_NUMA \
+            --disable X86_64_ACPI_NUMA \
+            --disable NODES_SPAN_OTHER_NODES \
+            --disable NUMA_EMU \
+            --disable NEED_MULTIPLE_NODES \
+            --disable USE_PERCPU_NUMA_NODE_ID \
+            --disable ACPI_NUMA \
+            --disable ARCH_SUPPORTS_NUMA_BALANCING \
+            --disable NODES_SHIFT \
+            --undefine NODES_SHIFT \
+            --disable NEED_MULTIPLE_NODES
+          echo "Enabling Linux Random Number Generator ..."
+          scripts/config --disable CONFIG_RANDOM_DEFAULT_IMPL
+          scripts/config --enable CONFIG_LRNG
+          scripts/config --enable CONFIG_LRNG_SHA256
+          scripts/config --enable CONFIG_LRNG_COMMON_DEV_IF
+          scripts/config --enable CONFIG_LRNG_DRNG_ATOMIC
+          scripts/config --enable CONFIG_LRNG_SYSCTL
+          scripts/config --enable CONFIG_LRNG_RANDOM_IF
+          scripts/config --module CONFIG_LRNG_KCAPI_IF
+          scripts/config --module CONFIG_LRNG_HWRAND_IF
+          scripts/config --enable CONFIG_LRNG_DEV_IF
+          scripts/config --enable CONFIG_LRNG_RUNTIME_ES_CONFIG
+          scripts/config --enable CONFIG_LRNG_IRQ_DFLT_TIMER_ES
+          scripts/config --disable CONFIG_LRNG_SCHED_DFLT_TIMER_ES
+          scripts/config --enable CONFIG_LRNG_TIMER_COMMON
+          scripts/config --disable CONFIG_LRNG_COLLECTION_SIZE_256
+          scripts/config --disable CONFIG_LRNG_COLLECTION_SIZE_512
+          scripts/config --enable CONFIG_LRNG_COLLECTION_SIZE_1024
+          scripts/config --disable CONFIG_LRNG_COLLECTION_SIZE_2048
+          scripts/config --disable CONFIG_LRNG_COLLECTION_SIZE_4096
+          scripts/config --disable CONFIG_LRNG_COLLECTION_SIZE_8192
+          scripts/config --set-val CONFIG_LRNG_COLLECTION_SIZE 1024
+          scripts/config --enable CONFIG_LRNG_HEALTH_TESTS
+          scripts/config --set-val CONFIG_LRNG_RCT_CUTOFF 31
+          scripts/config --set-val CONFIG_LRNG_APT_CUTOFF 325
+          scripts/config --enable CONFIG_LRNG_IRQ
+          scripts/config --enable CONFIG_LRNG_CONTINUOUS_COMPRESSION_ENABLED
+          scripts/config --disable CONFIG_LRNG_CONTINUOUS_COMPRESSION_DISABLED
+          scripts/config --enable CONFIG_LRNG_ENABLE_CONTINUOUS_COMPRESSION
+          scripts/config --enable CONFIG_LRNG_SWITCHABLE_CONTINUOUS_COMPRESSION
+          scripts/config --set-val CONFIG_LRNG_IRQ_ENTROPY_RATE 256
+          scripts/config --enable CONFIG_LRNG_JENT
+          scripts/config --set-val CONFIG_LRNG_JENT_ENTROPY_RATE 16
+          scripts/config --enable CONFIG_LRNG_CPU
+          scripts/config --set-val CONFIG_LRNG_CPU_FULL_ENT_MULTIPLIER 1
+          scripts/config --set-val CONFIG_LRNG_CPU_ENTROPY_RATE 8
+          scripts/config --enable CONFIG_LRNG_SCHED
+          scripts/config --set-val CONFIG_LRNG_SCHED_ENTROPY_RATE 4294967295
+          scripts/config --enable CONFIG_LRNG_DRNG_CHACHA20
+          scripts/config --module CONFIG_LRNG_DRBG
+          scripts/config --module CONFIG_LRNG_DRNG_KCAPI
+          scripts/config --enable CONFIG_LRNG_SWITCH
+          scripts/config --enable CONFIG_LRNG_SWITCH_HASH
+          scripts/config --module CONFIG_LRNG_HASH_KCAPI
+          scripts/config --enable CONFIG_LRNG_SWITCH_DRNG
+          scripts/config --module CONFIG_LRNG_SWITCH_DRBG
+          scripts/config --module CONFIG_LRNG_SWITCH_DRNG_KCAPI
+          scripts/config --enable CONFIG_LRNG_DFLT_DRNG_CHACHA20
+          scripts/config --disable CONFIG_LRNG_DFLT_DRNG_DRBG
+          scripts/config --disable CONFIG_LRNG_DFLT_DRNG_KCAPI
+          scripts/config --enable CONFIG_LRNG_TESTING_MENU
+          scripts/config --disable CONFIG_LRNG_RAW_HIRES_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_JIFFIES_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_IRQ_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_RETIP_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_REGS_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_ARRAY
+          scripts/config --disable CONFIG_LRNG_IRQ_PERF
+          scripts/config --disable CONFIG_LRNG_RAW_SCHED_HIRES_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_SCHED_PID_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_SCHED_START_TIME_ENTROPY
+          scripts/config --disable CONFIG_LRNG_RAW_SCHED_NVCSW_ENTROPY
+          scripts/config --disable CONFIG_LRNG_SCHED_PERF
+          scripts/config --disable CONFIG_LRNG_ACVT_HASH
+          scripts/config --disable CONFIG_LRNG_RUNTIME_MAX_WO_RESEED_CONFIG
+          scripts/config --disable CONFIG_LRNG_TEST_CPU_ES_COMPRESSION
+          scripts/config --enable CONFIG_LRNG_SELFTEST
+          scripts/config --disable CONFIG_LRNG_SELFTEST_PANIC2
+          scripts/config --disable ZRAM_DEF_COMP_LZORLE \
+              --enable ZRAM_DEF_COMP_ZSTD \
+              --set-str ZRAM_DEF_COMP zstd \
+              --disable ZSWAP_COMPRESSOR_DEFAULT_LZ4 \
+              --enable ZSWAP_COMPRESSOR_DEFAULT_ZSTD \
+              --set-str ZSWAP_COMPRESSOR_DEFAULT zstd \
+              --enable ZRAM_ENTROPY \
+              --set-val ZRAM_ENTROPY_THRESHOLD 100000
+          echo "Enabling zram ZSTD compression..."
+          scripts/config --disable ZRAM_DEF_COMP_LZORLE \
+              --enable ZRAM_DEF_COMP_ZSTD \
+              --set-str ZRAM_DEF_COMP zstd \
+              --disable ZSWAP_COMPRESSOR_DEFAULT_LZ4 \
+              --enable ZSWAP_COMPRESSOR_DEFAULT_ZSTD \
+              --set-str ZSWAP_COMPRESSOR_DEFAULT zstd \
+              --enable ZRAM_ENTROPY \
+              --set-val ZRAM_ENTROPY_THRESHOLD 100000
+          scripts/config --disable CC_OPTIMIZE_FOR_PERFORMANCE \
+              --enable CC_OPTIMIZE_FOR_PERFORMANCE_O3
     ### Prepared version
         make -s kernelrelease > version
         echo "Prepared $pkgbase version $(<version)"
@@ -210,8 +316,6 @@ prepare() {
             exit
             fi
         fi
-    scripts/config --disable CONFIG_CC_IS_GCC
-    scripts/config --disable CONFIG_AS_IS_GNU
     ### Running make nconfig
 	[[ -z "$_makenconfig" ]] ||  make nconfig
 
@@ -236,9 +340,17 @@ prepare() {
 
 build() {
   cd $_srcname
-
+  cd "zfs"
+  ./autogen.sh
+  sed -i "s|\$(uname -r)|${pkgver}-${pkgsuffix}|g" configure
+          ./configure KERNEL_LLVM=1 --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
+          --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
+          --libexecdir=/usr/lib/zfs --with-config=kernel \
+          --with-linux=${srcdir}/$_srcname
   CFLAGS="-march=znver2 -O3"
   CXXFLAGS="${CFLAGS}"
+  make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
+  cd ..
   make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
 }
 
@@ -381,5 +493,3 @@ for _p in "${pkgname[@]}"; do
     _package${_p#$pkgbase}
   }"
 done
-
-# vim:set ts=8 sts=2 sw=2 et:

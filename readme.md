@@ -1,8 +1,9 @@
 # Linux-Tikogasa
 My amd-zen2 improved kernel.
+
 ~~1.zfs support~~
 
-2.ZSTD RAM and SWAP
+2.ZSTD RAM and SWAP support
 
 3.PDS CPU Scheduler
 
@@ -10,7 +11,7 @@ My amd-zen2 improved kernel.
 
 5.Xanmod patch
 
-6.CJK TTY support
+6.Chinese TTY support
 
 7.LQX patch
 

@@ -82,7 +82,7 @@ source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.x
         "init.py"
         "delete.txt"
         "insert.txt"
-        ""git+https://github.com/openzfs/zfs.git#commit=6c3c5fcfbe27d9193cd131753cc7e47ee2784621"")
+        "zfs::git+https://github.com/openzfs/zfs.git")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -486,7 +486,20 @@ _package-docs() {
   ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
 }
 
-pkgname=("$pkgbase" "$pkgbase-headers")
+
+_package-zfs(){
+    pkgdesc="zfs module for the $pkgdesc kernel"
+    depends=('pahole' linux-$pkgsuffix=$_kernver)
+
+    cd ${srcdir}/"zfs"
+    install -dm755 "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
+    install -m644 module/*/*.ko "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
+    find "$pkgdir" -name '*.ko' -exec zstd --rm -10 {} +
+    #  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='${pkgver}-${pkgbase}'/" "$startdir/zfs.install"
+}
+
+
+pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-zfs")
 for _p in "${pkgname[@]}"; do
   eval "package_$_p() {
     $(declare -f "_package${_p#$pkgbase}")

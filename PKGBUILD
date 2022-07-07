@@ -81,8 +81,7 @@ source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.x
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
         "init.py"
         "delete.txt"
-        "insert.txt"
-        "zfs::git+https://github.com/openzfs/zfs.git")
+        "insert.txt")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -95,8 +94,7 @@ sha512sums=('dbbc9d1395898a498fa4947fceda1781344fa5d360240f753810daa4fa88e519833
             'b2a4c73ec0e47bbe7e242a193add0349986d641f46cbd6896983b61263c9ad22b0a32aabfbd3318c5af01cf850329b92e3c597dc8ca44d3591f0fc817ae38900'
             'bc5bbab328be96e1629a8fcc168391bb739730e029573686d18e598d830e0b1e68a73953192468eae03f8ad1ba6068126716f702a71b21a02f7e0f035ba0495f'
             '4fd87f0940a93d9e3a006862cd1dfa5ab72c4c4577944b8213ba876a1a6b95003494e9c039a43d8d03684c566cf63b6765eb06e614a5220c59ff535ac11039d7'
-            '014f98ed6402365b68afa673c88c72370946aa6123684869983a323b6af3cf8f2f3fc085f8bf776bbb5a7ab88b20a2a0a8c788f4755f08a0ab96f017f78a1d6d'
-            'SKIP')
+            '014f98ed6402365b68afa673c88c72370946aa6123684869983a323b6af3cf8f2f3fc085f8bf776bbb5a7ab88b20a2a0a8c788f4755f08a0ab96f017f78a1d6d')
 
 
 
@@ -339,17 +337,9 @@ prepare() {
 }
 
 build() {
-  cd ${srcdir}/"zfs"
-  ./autogen.sh
-  sed -i "s|\$(uname -r)|${pkgver}-${pkgsuffix}|g" configure
-          ./configure KERNEL_LLVM=1 --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
-          --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
-          --libexecdir=/usr/lib/zfs --with-config=kernel \
-          --with-linux=${srcdir}/$_srcname
+  cd $_srcname
   CFLAGS="-march=znver2 -O3"
   CXXFLAGS="${CFLAGS}"
-  make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
-  cd ${srcdir}/${_srcname}
   make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
 }
 
@@ -485,20 +475,7 @@ _package-docs() {
   ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
 }
 
-
-_package-zfs(){
-    pkgdesc="zfs module for the $pkgdesc kernel"
-    depends=('pahole' linux-$pkgsuffix=$_kernver)
-
-    cd ${srcdir}/"zfs"
-    install -dm755 "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
-    install -m644 module/*/*.ko "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
-    find "$pkgdir" -name '*.ko' -exec zstd --rm -10 {} +
-    #  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='${pkgver}-${pkgbase}'/" "$startdir/zfs.install"
-}
-
-
-pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-zfs")
+pkgname=("$pkgbase" "$pkgbase-headers")
 for _p in "${pkgname[@]}"; do
   eval "package_$_p() {
     $(declare -f "_package${_p#$pkgbase}")

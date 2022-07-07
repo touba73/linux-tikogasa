@@ -1,6 +1,6 @@
 # Linux-Tikogasa
 My amd-zen2 improved kernel.
-1.zfs support
+~~1.zfs support~~
 2.ZSTD RAM and SWAP
 3.PDS CPU Scheduler
 4.BMQ I/O Scheduler

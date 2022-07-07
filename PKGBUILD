@@ -339,8 +339,7 @@ prepare() {
 }
 
 build() {
-  cd $_srcname
-  cd "zfs"
+  cd ${srcdir}/"zfs"
   ./autogen.sh
   sed -i "s|\$(uname -r)|${pkgver}-${pkgsuffix}|g" configure
           ./configure KERNEL_LLVM=1 --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
@@ -350,7 +349,7 @@ build() {
   CFLAGS="-march=znver2 -O3"
   CXXFLAGS="${CFLAGS}"
   make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
-  cd ..
+  cd ${srcdir}/${_srcname}
   make all LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
 }
 

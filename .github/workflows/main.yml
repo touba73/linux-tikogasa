@@ -26,7 +26,7 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v5.18.9
+        automatic_release_tag: v5.18.10
         title: v5.18.9
         prerelease: false
         files: |

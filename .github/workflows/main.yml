@@ -11,8 +11,8 @@ jobs:
     - name: Makepkg Build and Check
       id: makepkg
       with: 
-        makepkgArgs: -s --skippgpcheck -f
-      uses: Pinghigh/pkgbuild-action@v4
+        makepkgArgs: -s --skippgpcheck -f 
+      uses: Pinghigh/pkgbuild-action@v4.1
     - name: Print Package Files
       run: |
         echo "Successfully created the following package archive"
@@ -26,8 +26,8 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v5.18.11
-        title: v5.18.11
-        prerelease: false
+        automatic_release_tag: v5.19rc6
+        title: v5.19rc6
+        prerelease: true
         files: |
           ./*.zst

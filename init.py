@@ -1,7 +1,7 @@
 import os
 
 config_path="liquorix-package-5.18-8/linux-liquorix/debian/config/kernelarch-x86/config-arch-64"
-patch_path="liquorix-package-5.18-8/linux-liquorix/debian/patches/zen/v5.18.11-lqx1.patch"
+patch_path="liquorix-package-5.18-8/linux-liquorix/debian/patches/zen/v5.18.12-lqx1.patch"
 f = open("delete.txt","r") 
 data1 = [line.strip('\n') for line in f.readlines()]#读取全部内容 ，并以列表方式返回
 f.close()

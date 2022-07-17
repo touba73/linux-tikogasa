@@ -68,7 +68,7 @@ pkgdesc='Linux Liquorix'
 url='https://liquorix.net/'
 arch=(x86_64)
 license=(GPL2)
-makedepends=(bc libelf cpio python pahole llvm-git lld-git clang-git llvm-libs-git python git)
+makedepends=(bc libelf cpio python pahole llvm lld clang llvm-libs python git)
 options=('!strip')
 #_lucjanpath="https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/${_major}"
 _lucjanpath="https://gitlab.com/sirlucjan/kernel-patches/raw/master/${_major}"
@@ -82,7 +82,7 @@ source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.x
         "init.py"
         "delete.txt"
         "insert.txt"
-        "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/rawdiff/?id=v5.19-rc6&id2=v5.18")
+        "5.19rc6.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/rawdiff/?id=v5.19-rc6&id2=v5.18")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -138,6 +138,13 @@ prepare() {
             [[ $src = *.patch ]] || continue
         echo "Applying patch $src..."
         patch -Np1 < "../$src"
+        done
+	
+	local src
+	src="${src%%::*}"
+        src="${src##*/}"
+        echo "Applying 5.19 patch."
+        patch -Np1 < "../5.19rc6.patch"
         done
 
     ### Setting config
@@ -256,9 +263,6 @@ prepare() {
               --set-val ZRAM_ENTROPY_THRESHOLD 100000
           scripts/config --disable CC_OPTIMIZE_FOR_PERFORMANCE \
               --enable CC_OPTIMIZE_FOR_PERFORMANCE_O3
-    ### Prepared version
-        make -s kernelrelease > version
-        echo "Prepared $pkgbase version $(<version)"
 
     ### Optionally use running kernel's config
 	# code originally by nous; http://aur.archlinux.org/packages.php?ID=40191

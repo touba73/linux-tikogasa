@@ -139,13 +139,6 @@ prepare() {
         echo "Applying patch $src..."
         patch -Np1 < "../$src"
         done
-	
-	local src
-	src="${src%%::*}"
-        src="${src##*/}"
-        echo "Applying 5.19 patch."
-        patch -Np1 < "../5.19rc6.patch"
-
     ### Setting config
         echo "Setting config..."
         cat ${srcdir}/${_lqxpatchver}/linux-liquorix/debian/config/kernelarch-x86/config-arch-64 >./.config

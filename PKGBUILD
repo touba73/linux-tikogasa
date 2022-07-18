@@ -62,7 +62,7 @@ _lqxpatchname=liquorix-package
 _lqxpatchrel=13
 _lqxpatchver=${_lqxpatchname}-${_major}-${_lqxpatchrel}
 pkgbase=linux-tikogasa
-pkgver=5.19rc6
+pkgver=5.18.12
 pkgrel=1
 pkgdesc='Linux Liquorix'
 url='https://liquorix.net/'
@@ -81,8 +81,7 @@ source=("https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.x
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
         "init.py"
         "delete.txt"
-        "insert.txt"
-        "5.19rc6.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/rawdiff/?id=v5.19-rc6&id2=v5.18")
+        "insert.txt")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman

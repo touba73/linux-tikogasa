@@ -21,13 +21,13 @@ jobs:
     - name: Upload Package Archive
       uses: actions/upload-artifact@v2
       with:
-        path: ${{ steps.makepkg.outputs.pkgfile0 }}
+        path: ./*.zst
     - name: Create GitHub release
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v5.19rc6
-        title: v5.19rc6
-        prerelease: true
+        automatic_release_tag: v5.18.12
+        title: v5.18.12
+        prerelease: false
         files: |
           ./*.zst

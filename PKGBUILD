@@ -23,7 +23,6 @@ source=(
   config        # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/5.18/amd/0001-amd-patches-v2.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/5.18/prjc/alfred/prjc_v5.18-r2.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0001-block-Kconfig.iosched-set-default-value-of-IOSCHED_B.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0002-block-Fix-depends-for-BLK_DEV_ZONED.patch"

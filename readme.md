@@ -13,7 +13,7 @@ My amd-zen2 improved kernel.
 
 6.Chinese TTY support
 
-7.LQX patch
+7.WineSync
 
 8.Clearlinux patch
 

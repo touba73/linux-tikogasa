@@ -17,7 +17,6 @@ jobs:
       run: |
         echo "Successfully created the following package archive"
         echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
-        # Uncomment to upload the package as an artifact
     - name: Upload Package Archive
       uses: actions/upload-artifact@v2
       with:
@@ -26,8 +25,8 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v5.18.12
-        title: v5.18.12
+        automatic_release_tag: v5.18.14
+        title: v5.18.14
         prerelease: false
         files: |
           ./*.zst

@@ -12,8 +12,8 @@ url="https://github.com/torvalds/linux"
 arch=(x86_64)
 license=(GPL2)
 makedepends=(
-  bc libelf pahole cpio perl tar xz clang-git lld-git initramfs kmod
-  xmlto llvm-libs-git python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm-git git
+  bc libelf pahole cpio perl tar xz clang lld initramfs kmod
+  xmlto llvm-libs python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
 )
 options=('!strip')
 _srcname="linux-${gitver}"
@@ -75,30 +75,38 @@ prepare() {
   done
 
   echo "Setting config..."
-        cp ../config .config
-        echo "Enabling LLVM THIN LTO..."
-        scripts/config --enable LTO \
-            --enable LTO_CLANG \
-            --enable ARCH_SUPPORTS_LTO_CLANG \
-            --enable ARCH_SUPPORTS_LTO_CLANG_THIN \
-            --disable LTO_NONE \
-            --enable HAS_LTO_CLANG \
-            --disable LTO_CLANG_FULL \
-            --enable LTO_CLANG_THIN \
-            --enable HAVE_GCC_PLUGINS
-        echo "Disabling NUMA from kernel config..."
+          cp ../config .config
+          echo "Enabling LLVM THIN LTO..."
+          scripts/config --enable LTO \
+              --enable LTO_CLANG \
+              --enable ARCH_SUPPORTS_LTO_CLANG \
+              --enable ARCH_SUPPORTS_LTO_CLANG_THIN \
+              --disable LTO_NONE \
+              --enable HAS_LTO_CLANG \
+              --disable LTO_CLANG_FULL \
+              --enable LTO_CLANG_THIN \
+              --enable HAVE_GCC_PLUGINS
+          scripts/config --enable CONFIG_LTO
+          scripts/config --enable CONFIG_LTO_CLANG
+          scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG
+          scripts/config --enable CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN
+          scripts/config --enable CONFIG_HAS_LTO_CLANG
+          scripts/config --disable CONFIG_LTO_NONE
+          scripts/config --disable CONFIG_LTO_CLANG_FULL
+          scripts/config --enable CONFIG_LTO_CLANG_THIN
+          echo "Disabling NUMA from kernel config..."
           scripts/config --disable NUMA \
-              --disable AMD_NUMA \
-              --disable X86_64_ACPI_NUMA \
-              --disable NODES_SPAN_OTHER_NODES \
-              --disable NUMA_EMU \
-              --disable NEED_MULTIPLE_NODES \
-              --disable USE_PERCPU_NUMA_NODE_ID \
-              --disable ACPI_NUMA \
-              --disable ARCH_SUPPORTS_NUMA_BALANCING \
-              --disable NODES_SHIFT \
-              --undefine NODES_SHIFT \
-              --disable NEED_MULTIPLE_NODES
+                --disable AMD_NUMA \
+                --disable X86_64_ACPI_NUMA \
+                --disable NODES_SPAN_OTHER_NODES \
+                --disable NUMA_EMU \
+                --disable NEED_MULTIPLE_NODES \
+                --disable USE_PERCPU_NUMA_NODE_ID \
+                --disable ACPI_NUMA \
+                --disable ARCH_SUPPORTS_NUMA_BALANCING \
+                --disable NODES_SHIFT \
+                --undefine NODES_SHIFT \
+                --disable NEED_MULTIPLE_NODES
           echo "Enabling Linux Random Number Generator ..."
           scripts/config --disable CONFIG_RANDOM_DEFAULT_IMPL
           scripts/config --enable CONFIG_LRNG
@@ -203,10 +211,13 @@ prepare() {
 
           msg2 "Enable CONFIG_SCHED_ALT, this feature enable alternative CPU scheduler"
           scripts/config --enable CONFIG_SCHED_ALT
-
+          echo "Enable CJK TTY"
+          scripts/config --enable FONT_CJK_16x16
           msg2 "Enable PDS CPU scheduler"
           scripts/config --disable CONFIG_SCHED_BMQ
           scripts/config --enable CONFIG_SCHED_PDS
+          msg2 "Enable Winesync"
+          scripts/config --enable CONFIG_WINESYNC
   make oldconfig && make prepare
   diff -u ../config .config || :
 

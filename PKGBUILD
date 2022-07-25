@@ -25,7 +25,6 @@ source=(
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/5.18/prjc/alfred/prjc_v5.18-r2.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/cpu/0002-init-Kconfig-enable-O3-for-all-arches.patch"
-  "https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/amd-patches-v2/0001-amd-patches.patch"
   "https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/bfq-lucjan-ll-v12-all/0001-bfq-lucjan.patch"
   # BTRFS patches
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/btrfs/0001-btrfs-patches-v14.patch"

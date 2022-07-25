@@ -24,12 +24,9 @@ source=(
   "linux-patches::git+https://github.com/xanmod/linux-patches"
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/5.18/prjc/alfred/prjc_v5.18-r2.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0001-block-Kconfig.iosched-set-default-value-of-IOSCHED_B.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0002-block-Fix-depends-for-BLK_DEV_ZONED.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0003-block-set-rq_affinity-2-for-full-multithreading-I-O.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0002-LL-elevator-set-default-scheduler-to-bfq-for-blk-mq.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/block/0003-LL-elevator-always-use-bfq-unless-overridden-by-flag.patch"
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/cpu/0002-init-Kconfig-enable-O3-for-all-arches.patch"
+  "https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/amd-patches-v2/0001-amd-patches.patch"
+  "https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/bfq-lucjan-ll-v12-all/0001-bfq-lucjan.patch"
   # BTRFS patches
   "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/btrfs/0001-btrfs-patches-v14.patch"
 )

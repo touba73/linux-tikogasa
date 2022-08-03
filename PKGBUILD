@@ -49,8 +49,8 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 
 prepare() {
   cp clearlinux-linux/*.patch ./
-  cp linux-patches/linux-${major}.y-xanmod/xanmod/* ./
-  cp linux-patches/linux-${major}.y-xanmod/wine/* ./
+  cp linux-patches/linux-${major}.y-xanmod/xanmod/*.patch ./
+  cp linux-patches/linux-${major}.y-xanmod/wine/*.patch ./
   cd $_srcname
 
   echo "Setting version..."

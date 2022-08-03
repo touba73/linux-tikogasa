@@ -1,11 +1,11 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 pkgbase=linux-tikogasa
-pkgver=v5.18.14
-major=5.18
+pkgver=v5.19
+major=5.19
 pkgrel=1
 pkgdesc='Linux'
-gitver=5.18.14
+gitver=5.19
 _srctag=v${pkgver%.*}-${pkgver##*.}
 _branch=5.x
 url="https://github.com/torvalds/linux"
@@ -22,10 +22,9 @@ source=(
   "clearlinux-linux::git+https://github.com/clearlinux-pkgs/linux"
   config        # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
-  "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-5.18.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/5.18/prjc/alfred/prjc_v5.18-r2.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/cpu/0002-init-Kconfig-enable-O3-for-all-arches.patch"
-  "https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/bfq-lucjan-ll-v12-all/0001-bfq-lucjan.patch"
+  "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${major}.patch"
+  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/prjc/alfred/prjc_v${major}-r0.patch"
+  "https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17%2B.patch"
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
@@ -50,9 +49,8 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 
 prepare() {
   cp clearlinux-linux/*.patch ./
-  cp linux-patches/linux-5.18.y-xanmod/graysky/* ./
-  cp linux-patches/linux-5.18.y-xanmod/xanmod/* ./
-  cp linux-patches/linux-5.18.y-xanmod/wine/* ./
+  cp linux-patches/linux-${major}.y-xanmod/xanmod/* ./
+  cp linux-patches/linux-${major}.y-xanmod/wine/* ./
   cd $_srcname
 
   echo "Setting version..."

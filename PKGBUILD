@@ -1,11 +1,11 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 pkgbase=linux-tikogasa
-pkgver=v5.19.2
+pkgver=v5.19.3
 major=5.19
 pkgrel=1
 pkgdesc='Linux'
-gitver=5.19.2
+gitver=5.19.3
 _srctag=v${pkgver%.*}-${pkgver##*.}
 _branch=5.x
 url="https://github.com/torvalds/linux"

@@ -23,13 +23,13 @@ source=(
   config        # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${major}.patch"
-  "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/prjc/alfred/prjc_v${major}-r0.patch"
+  # "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/prjc/alfred/prjc_v${major}-r0.patch"
   "https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17%2B.patch"
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
-  '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
-  'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
+  # '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
+  # 'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
   'C7E7849466FE2358343588377258734B41C31549'  # David Runge <dvzrv@archlinux.org>
 )
 sha256sums=('3882e26fcedcfe3ccfc158b9be2d95df25f26c3795ecf1ad95708ed532f5c93c'
@@ -37,7 +37,7 @@ sha256sums=('3882e26fcedcfe3ccfc158b9be2d95df25f26c3795ecf1ad95708ed532f5c93c'
             'SKIP'
             '44013e78d70e0ed47ed5bcef7de4e9c315cad9ff3bd46234a5c23f0928d642f7'
             'SKIP'
-            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d'
+            # 'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d'
             'bc356a90997256b189153fd804a791d7a0fcd20fc9c0369396a2f5194ab32579'
             '52755f984d28054c026b79a455d60c184b9b3f978ca315a5483d812598b05a72'
             '2b0ffe6ee835c57043f6b762c8c4bbd51c4ab82be197ac3f2974cf075999d8d9'

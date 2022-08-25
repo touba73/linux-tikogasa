@@ -23,7 +23,7 @@ source=(
   config        # the main kernel config file
   "linux-patches::git+https://github.com/xanmod/linux-patches"
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${major}.patch"
-  # "https://raw.githubusercontent.com/blacksky3/patches/main/${major}/prjc/alfred/prjc_v${major}-r0.patch"
+  "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/sched/0001-prjc-cachy.patch"
   "https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17%2B.patch"
 )
 validpgpkeys=(

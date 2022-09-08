@@ -17,6 +17,6 @@ My amd-zen2 improved kernel.
 
 8.Clearlinux patch
 
-9.Build with llvm/clang/lld 15.0 LTO_thin
+9.Build with llvm/clang/lld latest stable build and use LTO_thin
 
 9.GRAYSKY2 patch for AMD ZEN2 CPU

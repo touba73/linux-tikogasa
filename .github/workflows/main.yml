@@ -25,8 +25,8 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v5.19.5
-        title: v5.19.5
+        automatic_release_tag: v5.19.7
+        title: v5.19.7
         prerelease: false
         files: |
           ./*.zst

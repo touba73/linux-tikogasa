@@ -1,11 +1,11 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 pkgbase=linux-tikogasa
-pkgver=v5.19.5
+pkgver=v5.19.7
 major=5.19
 pkgrel=1
 pkgdesc='Linux'
-gitver=5.19.5
+gitver=5.19.7
 _srctag=v${pkgver%.*}-${pkgver##*.}
 _branch=5.x
 url="https://github.com/torvalds/linux"
@@ -32,7 +32,7 @@ validpgpkeys=(
   # 'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
   'C7E7849466FE2358343588377258734B41C31549'  # David Runge <dvzrv@archlinux.org>
 )
-sha256sums=('3882e26fcedcfe3ccfc158b9be2d95df25f26c3795ecf1ad95708ed532f5c93c'
+sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             '44013e78d70e0ed47ed5bcef7de4e9c315cad9ff3bd46234a5c23f0928d642f7'

@@ -1,7 +1,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 pkgbase=linux-tikogasa
-pkgver=v${gitver}
+pkgver=v"${gitver}"
 major=5.19
 pkgrel=1
 pkgdesc='Linux'

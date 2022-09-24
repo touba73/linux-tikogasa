@@ -1,16 +1,19 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 # Maintainer: Pinghigh <pinghigh24678@outlook.com>
-pkgbase=linux-tikogas
+pkgsuffix=tikogasa
+pkgbase=linux-${pkgsuffix}
 major=5.19
 pkgrel=1
 pkgdesc='Linux'
-gitver=5.19.9
+gitver=5.19.11
 pkgver=v${gitver}
 _srctag=v${pkgver%.*}-${pkgver##*.}
 _branch=5.x
 url="https://github.com/torvalds/linux"
 arch=(x86_64)
 license=(GPL2)
+_kernver=$pkgver-$pkgrel
+pkgdesc="Tibrella's self-using kernel"
 makedepends=(
   bc libelf pahole cpio perl tar xz clang lld initramfs kmod
   xmlto llvm-libs python-sphinx python-sphinx_rtd_theme graphviz imagemagick llvm git
@@ -25,6 +28,11 @@ source=(
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${major}.patch"
   "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/sched/0001-prjc.patch"
   "https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17%2B.patch"
+  "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/misc/0001-rust.patch"
+  "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/0006-fs-patches.patch"
+  "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/0010-lrng.patch"
+  "git+https://github.com/openzfs/zfs.git"
+
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
@@ -221,7 +229,18 @@ build() {
   cd $_srcname
   CFLAGS="-march=znver2 -O3"
   CXXFLAGS="${CFLAGS}"
-  make LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16
+  BUILDFLAGS="LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16"
+  make ${BUILDFLAGS}
+
+  cd ${srcdir}/"zfs"
+
+  ./autogen.sh
+  sed -i "s|\$(uname -r)|${pkgver}-${pkgsuffix}|g" configure
+  ./configure KERNEL_LLVM=1 --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
+    --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
+    --libexecdir=/usr/lib/zfs --with-config=kernel \
+    --with-linux=${srcdir}/$_srcname
+  make ${BUILDFLAGS}
 }
 
 _package() {
@@ -332,6 +351,17 @@ _package-headers() {
   echo "Adding symlink..."
   mkdir -p "$pkgdir/usr/src"
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
+}
+
+_package-zfs(){
+    pkgdesc="zfs module for the $pkgdesc kernel"
+    depends=('pahole' linux-$pkgsuffix=$_kernver)
+
+    cd ${srcdir}/"zfs"
+    install -dm755 "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
+    install -m644 module/*/*.ko "$pkgdir/usr/lib/modules/${_kernver}-${pkgsuffix}"
+    find "$pkgdir" -name '*.ko' -exec zstd --rm -10 {} +
+    #  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='${pkgver}-${pkgbase}'/" "$startdir/zfs.install"
 }
 
 pkgname=("$pkgbase" "$pkgbase-headers")

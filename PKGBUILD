@@ -227,7 +227,7 @@ prepare() {
 build() {
   cd $_srcname
   BUILDFLAGS='LLVM=1 LLVM_IAS=1 CFLAGS="-march=znver2 -O3" CXXFLAGS="-march=znver2 -O3" -j16'
-  make ${BUILDFLAGS}
+  make ${BUILDFLAGS[*]}
 
   cd ${srcdir}/"zfs"
 
@@ -237,7 +237,7 @@ build() {
     --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
     --libexecdir=/usr/lib/zfs --with-config=kernel \
     --with-linux=${srcdir}/$_srcname
-  make ${BUILDFLAGS}
+  make ${BUILDFLAGS[*]}
 }
 
 _package() {

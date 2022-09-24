@@ -28,7 +28,6 @@ source=(
   "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${major}.patch"
   "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/sched/0001-prjc.patch"
   "https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17%2B.patch"
-  "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/misc/0001-rust.patch"
   "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/0006-fs-patches.patch"
   "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/5.19/0010-lrng.patch"
   "git+https://github.com/openzfs/zfs.git"

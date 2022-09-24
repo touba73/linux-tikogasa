@@ -226,9 +226,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  CFLAGS="-march=znver2 -O3"
-  CXXFLAGS="${CFLAGS}"
-  BUILDFLAGS="LLVM=1 LLVM_IAS=1 CFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j16"
+  BUILDFLAGS="LLVM=1 LLVM_IAS=1 CFLAGS='-march=znver2 -O3' CXXFLAGS='-march=znver2 -O3' -j16"
   make ${BUILDFLAGS}
 
   cd ${srcdir}/"zfs"
